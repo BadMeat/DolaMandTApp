@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DolaMandTApp</string>
+    <string name="tv">TV</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="movie">Movie</string>
+</resources>
