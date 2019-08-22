@@ -13,6 +13,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BASE_URL", "\"https://api.themoviedb.org/3/\""
+        buildConfigField "String", "IMAGE_URL", "\"http://image.tmdb.org/t/p/w185\""
+        buildConfigField "String", "API_KEY", "\"3da8902babab85c9ac30e837198e9bf9\""
     }
     buildTypes {
         release {

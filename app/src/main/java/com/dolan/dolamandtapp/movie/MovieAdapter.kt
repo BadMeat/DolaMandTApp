@@ -9,9 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dolan.dolamandtapp.R
 import com.squareup.picasso.Picasso
 
-class MovieAdapter(private val itemList: List<MovieResponse>) : RecyclerView.Adapter<MovieAdapter.MovieAdapter>() {
+class MovieAdapter(private val itemList: List<MovieResponse>) :
+    RecyclerView.Adapter<MovieAdapter.MovieAdapter>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieAdapter {
-        return MovieAdapter(LayoutInflater.from(parent.context).inflate(R.layout.item_tv, parent, false))
+        return MovieAdapter(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_tv,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount() = itemList.size
@@ -30,7 +37,10 @@ class MovieAdapter(private val itemList: List<MovieResponse>) : RecyclerView.Ada
             Picasso.get().load(e.poster).into(imgPoster)
             txtTitle.text = e.title
             txtRate.text = e.rate.toString()
-            txtDesc.text = e.desc
+            if (e.desc.isNotEmpty()) {
+                txtDesc.text = e.desc
+            }
+
         }
     }
 }

@@ -11,5 +11,5 @@ data class TvResponse(
     val name: String = jsonObject.getString("name")
     val rate: Double = jsonObject.getDouble("vote_average")
     var posterPath: String = jsonObject.getString("poster_path")
-    val desc: String = jsonObject.getString("overview")
+    var desc: String = jsonObject.getString("overview")
 }

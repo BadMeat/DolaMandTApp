@@ -4,25 +4,32 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dolan.dolamandtapp.BuildConfig
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
+import java.util.*
 
 class MovieViewModel : ViewModel() {
 
     private val itemMovie: MutableLiveData<MutableList<MovieResponse>> = MutableLiveData()
 
-    companion object {
-        const val API_KEY = "3da8902babab85c9ac30e837198e9bf9"
-    }
-
-    fun setMovie() {
+    fun setMovie(defaultDesc: String) {
         val client = AsyncHttpClient()
-        val url = "https://api.themoviedb.org/3/movie/popular?api_key=$API_KEY&language=en-US"
+        var language = "en-US"
+        if (Locale.getDefault().displayCountry.equals("Indonesia", true)) {
+            language = "id"
+        }
+        val url =
+            "${BuildConfig.BASE_URL}movie/popular?api_key=${BuildConfig.API_KEY}&language=$language"
         val listItem: MutableList<MovieResponse> = mutableListOf()
         client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?) {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?
+            ) {
                 try {
                     val respondObject = String(responseBody!!)
                     val respondArray = JSONObject(respondObject)
@@ -30,7 +37,10 @@ class MovieViewModel : ViewModel() {
                     for (i in 0 until list.length()) {
                         val movie = list.getJSONObject(i)
                         val movieItem = MovieResponse(movie)
-                        movieItem.poster = "http://image.tmdb.org/t/p/w185${movieItem.poster}"
+                        if (movieItem.desc.isEmpty()) {
+                            movieItem.desc = defaultDesc
+                        }
+                        movieItem.poster = "${BuildConfig.IMAGE_URL}${movieItem.poster}"
                         listItem.add(movieItem)
                     }
                     itemMovie.postValue(listItem)

@@ -37,7 +37,7 @@ class MovieFragment : Fragment() {
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.adapter = adapter
 
-        movieModel.setMovie()
+        movieModel.setMovie(resources.getString(R.string.no_desc))
 
         progress_bar.visibility = View.VISIBLE
     }

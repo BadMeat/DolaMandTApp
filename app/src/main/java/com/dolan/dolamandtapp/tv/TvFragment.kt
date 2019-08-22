@@ -35,7 +35,7 @@ class TvFragment : Fragment() {
         tvViewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
         tvViewModel.getTv().observe(this, getTv)
 
-        tvViewModel.setTv()
+        tvViewModel.setTv(resources.getString(R.string.no_desc))
         progress_bar.visibility = View.VISIBLE
     }
 

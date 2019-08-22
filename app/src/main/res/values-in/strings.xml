@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DolanMandTApp</string>
+    <string name="tv">Televisi</string>
+
+    <string name="movie">Film</string>
+    <string name="this_is_poster">Ini Pioster</string>
+    <string name="title">Judul :</string>
+    <string name="rating">Peringkat :</string>
+    <string name="no_desc">Tidak Ada Deskripsi</string>
+</resources>
