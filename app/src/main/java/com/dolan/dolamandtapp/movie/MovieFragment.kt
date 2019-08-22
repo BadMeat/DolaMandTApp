@@ -1,6 +1,7 @@
 package com.dolan.dolamandtapp.movie
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dolan.dolamandtapp.DetailActivity
 import com.dolan.dolamandtapp.R
 import kotlinx.android.synthetic.main.fragment_movie.*
 
@@ -29,7 +31,14 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MovieAdapter(movieList)
+        adapter = MovieAdapter(movieList) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_TITLE, it.title)
+            intent.putExtra(DetailActivity.EXTRA_RATE, it.rate)
+            intent.putExtra(DetailActivity.EXTRA_DETAIL, it.desc)
+            intent.putExtra(DetailActivity.EXTRA_IMAGE, it.poster)
+            startActivity(intent)
+        }
 
         movieModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
         movieModel.getItem().observe(this, getMovie)
