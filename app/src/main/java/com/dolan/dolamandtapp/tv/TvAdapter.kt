@@ -12,7 +12,10 @@ import com.squareup.picasso.Picasso
 /**
  * Created by Bencoleng on 21/08/2019.
  */
-class TvAdapter(private val listItem: List<TvResponse>) :
+class TvAdapter(
+    private val listItem: List<TvResponse>,
+    private val listener: (TvResponse) -> Unit
+) :
     RecyclerView.Adapter<TvAdapter.TvHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvHolder {
         return TvHolder(
@@ -27,7 +30,7 @@ class TvAdapter(private val listItem: List<TvResponse>) :
     override fun getItemCount() = listItem.size
 
     override fun onBindViewHolder(holder: TvHolder, position: Int) {
-        holder.bindItem(listItem[position])
+        holder.bindItem(listItem[position], listener)
     }
 
     inner class TvHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,12 +40,15 @@ class TvAdapter(private val listItem: List<TvResponse>) :
         private val txtRating: TextView = view.findViewById(R.id.txt_rating)
         private val txtDesc: TextView = view.findViewById(R.id.txt_desc)
 
-        fun bindItem(e: TvResponse) {
+        fun bindItem(e: TvResponse, listener: (TvResponse) -> Unit) {
             Picasso.get().load(e.posterPath).into(imgPoster)
             txtTitle.text = e.name
             txtRating.text = e.rate.toString()
             if (e.desc.isNotEmpty()) {
                 txtDesc.text = e.desc
+            }
+            itemView.setOnClickListener {
+                listener(e)
             }
         }
     }

@@ -8,6 +8,7 @@ import org.json.JSONObject
 data class TvResponse(
     val jsonObject: JSONObject
 ) {
+    val id: Int = jsonObject.getInt("id")
     val name: String = jsonObject.getString("name")
     val rate: Double = jsonObject.getDouble("vote_average")
     var posterPath: String = jsonObject.getString("poster_path")

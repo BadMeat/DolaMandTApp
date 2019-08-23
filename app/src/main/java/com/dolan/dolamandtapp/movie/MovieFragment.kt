@@ -33,10 +33,8 @@ class MovieFragment : Fragment() {
 
         adapter = MovieAdapter(movieList) {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_TITLE, it.title)
-            intent.putExtra(DetailActivity.EXTRA_RATE, it.rate)
-            intent.putExtra(DetailActivity.EXTRA_DETAIL, it.desc)
-            intent.putExtra(DetailActivity.EXTRA_IMAGE, it.poster)
+            intent.putExtra(DetailActivity.EXTRA_ID, it.id)
+            intent.putExtra(DetailActivity.EXTRA_TYPE, 1)
             startActivity(intent)
         }
 

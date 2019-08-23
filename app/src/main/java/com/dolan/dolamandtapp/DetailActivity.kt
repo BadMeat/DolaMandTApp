@@ -1,30 +1,51 @@
 package com.dolan.dolamandtapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: DetailViewModel
+    private lateinit var data: DetailResponse
+
     companion object {
-        const val EXTRA_TITLE = "extraTitle"
-        const val EXTRA_RATE = "extraRate"
-        const val EXTRA_DETAIL = "extraDetail"
-        const val EXTRA_IMAGE = "extraImage"
+        const val EXTRA_ID = "extraId"
+        const val EXTRA_TYPE = "extraType"
+    }
+
+    private val getResponse = Observer<DetailResponse> {
+        if (it != null) {
+            data = it
+            txt_title.text = data.title
+            txt_rate.text = data.rate.toString()
+            txt_detail.text = data.desc
+            Picasso.get().load(data.poster).into(img_poster)
+            rate_score.rating = data.rate.toFloat() / 2f
+            progress_bar.visibility = View.INVISIBLE
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        txt_title.text = intent.getStringExtra(EXTRA_TITLE)
-        txt_rate.text = intent.getDoubleExtra(EXTRA_RATE, 0.0).toString()
-        txt_detail.text = intent.getStringExtra(EXTRA_DETAIL)
-        Picasso.get().load(intent.getStringExtra(EXTRA_IMAGE)).into(img_poster)
 
-        rate_score.rating = intent.getDoubleExtra(EXTRA_RATE, 0.0).toFloat() / 2f
+        val id = intent.getIntExtra(EXTRA_ID, 0)
+        val type = intent.getIntExtra(EXTRA_TYPE, 0)
+
+        Log.d("Extra Type", type.toString())
+
+        viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
+        viewModel.getData().observe(this, getResponse)
+        viewModel.setData(id, type)
+
         rate_score.isClickable = false
         rate_score.isLongClickable = false
         rate_score.isClearRatingEnabled = false
