@@ -24,6 +24,11 @@ class DetailActivity : AppCompatActivity() {
         txt_detail.text = intent.getStringExtra(EXTRA_DETAIL)
         Picasso.get().load(intent.getStringExtra(EXTRA_IMAGE)).into(img_poster)
 
+        rate_score.rating = intent.getDoubleExtra(EXTRA_RATE, 0.0).toFloat() / 2f
+        rate_score.isClickable = false
+        rate_score.isLongClickable = false
+        rate_score.isClearRatingEnabled = false
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
     }
