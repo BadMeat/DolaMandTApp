@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dolan.dolamandtapp.BuildConfig
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
+import java.util.*
 
 /**
  * Created by Bencoleng on 20/08/2019.
@@ -16,17 +18,23 @@ class TvViewModel : ViewModel() {
 
     private var listTv: MutableLiveData<MutableList<TvResponse>> = MutableLiveData()
 
-    companion object {
-        const val API_KEY = "3da8902babab85c9ac30e837198e9bf9"
-    }
-
-    fun setTv() {
+    fun setTv(defaultDesc : String) {
         val client = AsyncHttpClient()
         val listItem: MutableList<TvResponse> = mutableListOf()
-        val url = "https://api.themoviedb.org/3/tv/popular?api_key=$API_KEY&language=en-US"
+        var language = "en-US"
+        if (Locale.getDefault().displayCountry.equals("Indonesia", true)) {
+            language = "id"
+        }
+
+        val url =
+            "${BuildConfig.BASE_URL}tv/popular?api_key=${BuildConfig.API_KEY}&language=$language"
 
         client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?) {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?
+            ) {
                 try {
                     val result = String(responseBody!!)
                     val respondObject = JSONObject(result)
@@ -34,7 +42,10 @@ class TvViewModel : ViewModel() {
                     for (i in 0 until list.length()) {
                         val tv = list.getJSONObject(i)
                         val tvItem = TvResponse(tv)
-                        tvItem.posterPath = "http://image.tmdb.org/t/p/w185${tvItem.posterPath}"
+                        if(tvItem.desc.isEmpty()){
+                            tvItem.desc = defaultDesc
+                        }
+                        tvItem.posterPath = "${BuildConfig.IMAGE_URL}${tvItem.posterPath}"
                         listItem.add(tvItem)
                     }
                     listTv.postValue(listItem)

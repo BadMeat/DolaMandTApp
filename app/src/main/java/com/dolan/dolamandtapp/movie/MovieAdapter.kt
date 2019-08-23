@@ -9,15 +9,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dolan.dolamandtapp.R
 import com.squareup.picasso.Picasso
 
-class MovieAdapter(private val itemList: List<MovieResponse>) : RecyclerView.Adapter<MovieAdapter.MovieAdapter>() {
+class MovieAdapter(
+    private val itemList: List<MovieResponse>,
+    private val listener: (MovieResponse) -> Unit
+) :
+    RecyclerView.Adapter<MovieAdapter.MovieAdapter>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieAdapter {
-        return MovieAdapter(LayoutInflater.from(parent.context).inflate(R.layout.item_tv, parent, false))
+        return MovieAdapter(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_tv,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount() = itemList.size
 
     override fun onBindViewHolder(holder: MovieAdapter, position: Int) {
-        holder.bindItem(itemList[position])
+        holder.bindItem(itemList[position], listener)
     }
 
     class MovieAdapter(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,11 +36,16 @@ class MovieAdapter(private val itemList: List<MovieResponse>) : RecyclerView.Ada
         private val txtDesc: TextView = view.findViewById(R.id.txt_desc)
         private val txtRate: TextView = view.findViewById(R.id.txt_rating)
 
-        fun bindItem(e: MovieResponse) {
+        fun bindItem(e: MovieResponse, listener: (MovieResponse) -> Unit) {
             Picasso.get().load(e.poster).into(imgPoster)
             txtTitle.text = e.title
             txtRate.text = e.rate.toString()
-            txtDesc.text = e.desc
+            if (e.desc.isNotEmpty()) {
+                txtDesc.text = e.desc
+            }
+            itemView.setOnClickListener {
+                listener(e)
+            }
         }
     }
 }
